@@ -4,12 +4,12 @@ import pygame
 pygame.init()
 
 # set resolution
-display_width = 800
-display_height = 600
+display_width = 1800
+display_height = 1000
 
 # define grid
-grid_width = 80  # dimensions in cells
-grid_height = 60
+grid_width = 180  # dimensions in cells
+grid_height = 100
 cell_width = display_width / grid_width  # cell dimensions in pixels
 cell_height = display_height / grid_height
 grid = []
