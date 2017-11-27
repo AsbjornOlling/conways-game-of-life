@@ -1,5 +1,6 @@
 import pygame
 
+
 pygame.init()
 
 # set resolution
@@ -22,15 +23,16 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("CONWAY")
 gameDisplay.fill(white)
 
-
+# behavior for the cells
+# this is the core off the game
 class Cell:
     def __init__(self, coord):
         self.x = coord[0]
         self.y = coord[1]
         self.populated = False
 
-
-    def update(self):
+    # 
+    def check_for_flip(self):
         # count populated neighbors
         populated_neighbors = 0
         for xdiff in range(-1,2):
@@ -46,19 +48,15 @@ class Cell:
         # then act on the result
         # for populated cells
         if self.populated:
-            print(str(populated_neighbors))
             # cells with 0-1 neighbors die of solitude
             if populated_neighbors < 2:
-                print("Dying from solutide")
-                return [x,y]
+                return True
             # cells with > 4 die from overpoupulation
             elif populated_neighbors > 4:
-                print("Dying from overpopulation")
-                return [x,y]
+                return True
         # empty cells with three neighbors become populated
         elif populated_neighbors == 3:
-            print("Birth!")
-            return [x,y]
+            return True
 
 
     def flip(self):
@@ -83,10 +81,20 @@ for x in range(0, grid_width):
     column = []
     for y in range(0, grid_height):
         column.append(Cell( (x,y) ))
-        if y == x: # make diagonal line
-            column[y].populated = True
-            column[y].draw()
     grid.append(column)
+
+# spawn a strange maze builder thingamagig
+grid[2][1].populated = True
+grid[3][2].populated = True
+grid[1][3].populated = True
+grid[2][3].populated = True
+grid[3][3].populated = True
+
+grid[2][1].draw()
+grid[3][2].draw()
+grid[1][3].draw()
+grid[2][3].draw()
+grid[3][3].draw()
 
 # object that handles timing
 clock = pygame.time.Clock()                      
@@ -108,10 +116,10 @@ while not crashed:
     cells_to_flip = []
     for x in range(0, grid_width):
         for y in range(0,grid_height):
-            result = grid[x][y].update()
-            if not result == None:
-                cells_to_flip.append(result)
+            if grid[x][y].check_for_flip():
+                cells_to_flip.append((x,y))
 
+    # flip all cells at the same time
     for cell_coords in cells_to_flip:
         grid[ cell_coords[0] ][ cell_coords[1] ].flip()
         grid[ cell_coords[0] ][ cell_coords[1] ].draw()
@@ -120,7 +128,7 @@ while not crashed:
     pygame.display.update()
 
     # wait 1/60 second
-    clock.tick(1)
+    clock.tick(60)
 
 pygame.quit()
 quit()
