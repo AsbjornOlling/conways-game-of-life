@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 
 pygame.init()
 
@@ -95,20 +96,19 @@ grid[3][2].populated = True
 grid[1][3].populated = True
 grid[2][3].populated = True
 grid[3][3].populated = True
-
 grid[2][1].draw()
 grid[3][2].draw()
 grid[1][3].draw()
 grid[2][3].draw()
 grid[3][3].draw()
+pygame.display.update()
 
 # object that handles timing
 clock = pygame.time.Clock()                      
 
-pygame.display.update()
-
 # start main loop
 crashed = False
+paused = True
 while not crashed:
 
     # main event handler
@@ -117,18 +117,25 @@ while not crashed:
         # exit event
         if event.type == pygame.QUIT:
             crashed = True
+        elif event.type == KEYDOWN:
+            # space toggles pause
+            if event.key == K_SPACE:
+                print("space GOT")
+                paused = not paused
 
-    # iterate through grid, finding cells to flip
-    cells_to_flip = []
-    for x in range(0, grid_width):
-        for y in range(0,grid_height):
-            if grid[x][y].check_for_flip():
-                cells_to_flip.append((x,y))
+    # simulation step one forward
+    if not paused:
+        # iterate through grid, finding cells to flip
+        cells_to_flip = []
+        for x in range(0, grid_width):
+            for y in range(0,grid_height):
+                if grid[x][y].check_for_flip():
+                    cells_to_flip.append((x,y))
 
-    # flip all cells at the same time
-    for cell_coords in cells_to_flip:
-        grid[ cell_coords[0] ][ cell_coords[1] ].flip()
-        grid[ cell_coords[0] ][ cell_coords[1] ].draw()
+        # flip all cells at the same time
+        for cell_coords in cells_to_flip:
+            grid[ cell_coords[0] ][ cell_coords[1] ].flip()
+            grid[ cell_coords[0] ][ cell_coords[1] ].draw()
 
     # update entire screen
     pygame.display.update()
