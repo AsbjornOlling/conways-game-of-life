@@ -1,3 +1,5 @@
+# This file contains only the cell class - behavior and properties of the individual cell
+
 import settings
 
 class Cell:
@@ -36,7 +38,7 @@ class Cell:
             if populated_neighbors < 2:
                 return True
             # cells with > 4 die from overpoupulation
-            elif populated_neighbors > 4:
+            elif populated_neighbors > 3:
                 return True
         # empty cells with three neighbors become populated
         elif populated_neighbors == 3:
