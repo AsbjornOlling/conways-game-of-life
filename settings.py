@@ -1,3 +1,5 @@
+# This file holds global variables, that need to be accessible from other files
+
 # set window size in pixels
 display_width = 1800
 display_height = 1000

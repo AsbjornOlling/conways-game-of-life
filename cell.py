@@ -40,7 +40,7 @@ class Cell:
             # cells with > 4 die from overpoupulation
             elif populated_neighbors > 3:
                 return True
-        # empty cells with three neighbors become populated
+        # empty cells with three neigbors become populated
         elif populated_neighbors == 3:
             return True
 
