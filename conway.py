@@ -1,6 +1,5 @@
 import pygame
 
-
 pygame.init()
 
 # set resolution
@@ -24,17 +23,14 @@ pygame.display.set_caption("CONWAY")
 gameDisplay.fill(white)
 
 # behavior for the cells
-# this is the core off the game
 class Cell:
     def __init__(self, coord):
         self.x = coord[0]
         self.y = coord[1]
         self.populated = False
 
-    # 
-    def check_for_flip(self):
-        # count populated neighbors
-        populated_neighbors = 0
+        # make list of neighbor coords to check
+        self.neighbor_coords = []
         for xdiff in range(-1,2):
             check_x = self.x + xdiff
             for ydiff in range(-1,2):
@@ -42,9 +38,19 @@ class Cell:
                 # dont check cells outside grid
                 if 0 <= check_x < grid_width - 1 and 0 <= check_y < grid_height - 1:
                     # cell shouldn't count itself
-                    if not grid[check_x][check_y] == self:
-                        if grid[check_x][check_y].populated:
-                            populated_neighbors += 1
+                    if not (check_x == self.x and check_y == self.y):
+                        self.neighbor_coords.append((check_x,check_y))
+
+
+    # counts number of neighbors
+    # and decides whether to flip the tile
+    def check_for_flip(self):
+        # count populated neighbors
+        populated_neighbors = 0
+        for coord in self.neighbor_coords:
+            if grid[coord[0]][coord[1]].populated:
+                populated_neighbors += 1
+
         # then act on the result
         # for populated cells
         if self.populated:
